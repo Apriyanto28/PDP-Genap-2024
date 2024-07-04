@@ -38,6 +38,18 @@ def get_mask(img, x, y, c, h, w):
     
     return hasil
 
+def cek_noise(mask):
+    Xp = mask[1][1]
+    rata = 0
+
+    for i in range(3):
+        for j in range(3):
+            if(i != 1 and j != 1):
+                rata = rata + mask[i][j]
+    rata = rata / 8
+
+    return abs(math.floor(rata) - Xp) >= 30
+
 def get_mean(arr):
     hsl = 0
     for i in range(3):
@@ -147,7 +159,8 @@ def Af(m_x, m_k_x):
     return m_k_x[ind]
 
 ## Read Image
-img = cv2.imread("D:\\Git\\PDP-Genap-2024\\codeDeblurImage\\hasi.png")
+img = cv2.imread("Lokasi Citra")
+print(f"Bentuk citra:\nTinggi Citra: {img.shape[0]}\nLebar Citra: {img.shape[1]}\nTChannel Citra: {img.shape[2]}\n")
 
 ## Get the image detail [ height, width, channel ]
 h = img.shape[0]
@@ -165,9 +178,15 @@ A_f = 0
 ## Get Masking from the Image
 for x in range(h):
     for y in range(w):
+
         hsl = [0, 0, 0]
+        print(f"x = {x}, y = {y}")
         for c in range(3):
             mask = get_mask(img, x, y, c, h, w)
+
+            if(not(cek_noise(mask))):
+                print(f"Channel ke-{c}: Skip")
+                continue
 
             rata = get_mean(mask)
             rata2 = get_mean2(mask)
@@ -186,4 +205,4 @@ for x in range(h):
                 hsl[c] = int(math.floor(A_f))
         hsl_img[x, y] = [hsl[0], hsl[1], hsl[2]]
 
-cv2.imwrite("D:\\Git\\PDP-Genap-2024\\codeDeblurImage\\output.png", hsl_img)
+cv2.imwrite("Lokasi Simpan Citra", hsl_img)

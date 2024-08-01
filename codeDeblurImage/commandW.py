@@ -1,14 +1,14 @@
 import subprocess
 import os
 
-## Change directory to the directory file
-os.system("pwd")
-
 ## Directory Location and filename image file
 file_name = "codeDeblurImage/ezgif-frame-050.jpg"
 
+## Directory Name [source]
+dir_name = "/home/apriyanto/Documents/DatasetBaru/test/images"
+
 ## Directory Result Location
-res_loc = "hasil-alpha-deconv"
+res_loc = "/home/apriyanto/Documents/DatasetBaru/test-res-deconv"
 
 # Making directory
 os.makedirs(res_loc)

@@ -1,5 +1,6 @@
 import subprocess
 import os
+import glob
 
 ## Directory Location and filename image file
 file_name = "codeDeblurImage/ezgif-frame-050.jpg"
@@ -24,6 +25,14 @@ com1 = [""] * 6
 com[0] = "sudo"
 com1[0] = "sudo"
 
+files = glob.glob(os.path.join(dir_name, ".jpg"))
+print(files)
+
+#for image_file in image_files:
+#    print(image_file)
+
+## Untuk pengujian
+'''
 ## run the iteration
 for i in range(1, 51, 2):
     ## example command
@@ -52,3 +61,4 @@ for i in range(1, 51, 2):
 
     # run the command
     subprocess.run(com1)
+'''

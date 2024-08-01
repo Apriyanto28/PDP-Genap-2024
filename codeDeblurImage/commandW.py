@@ -12,7 +12,8 @@ dir_name = "/home/apriyanto/Documents/DatasetBaru/test/images"
 res_loc = "/home/apriyanto/Documents/DatasetBaru/test-res-deconv"
 
 # Making directory
-os.makedirs(res_loc)
+if(not(os.path.exists(res_loc))):
+    os.makedirs(res_loc)
 
 ## Filename Result
 file_name_res = "result"
@@ -25,11 +26,10 @@ com1 = [""] * 6
 com[0] = "sudo"
 com1[0] = "sudo"
 
-files = glob.glob(os.path.join(dir_name, ".jpg"))
-print(files)
 
-#for image_file in image_files:
-#    print(image_file)
+for image_file in os.listdir(dir_name):
+    if(image_file.endswith(".jpg")):
+        print(image_file)
 
 ## Untuk pengujian
 '''

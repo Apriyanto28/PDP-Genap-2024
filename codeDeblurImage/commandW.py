@@ -6,10 +6,10 @@ import glob
 #file_name = "codeDeblurImage/ezgif-frame-050.jpg"
 
 ## Directory Name [source]
-dir_name = "/home/apriyanto/Documents/DatasetBaru/valid/images"
+dir_name = "/home/apriyanto/Documents/DatasetBaru/train/images"
 
 ## Directory Result Location
-res_loc = "/home/apriyanto/Documents/DatasetBaru/valid-res-deconv"
+res_loc = "/home/apriyanto/Documents/DatasetBaru/train-res-deconv"
 
 # Making directory
 if(not(os.path.exists(res_loc))):

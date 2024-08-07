@@ -183,8 +183,8 @@ img = cv2.imread(img_loc)
 print(f"Bentuk citra:\nTinggi Citra: {img.shape[0]}\nLebar Citra: {img.shape[1]}\nChannel Citra: {img.shape[2]}\n")
 
 ## Get the image detail [ height, width, channel ]
-h = img.shape[0]
-w = img.shape[1]
+hh = img.shape[0]
+ww = img.shape[1]
 
 ## Declare Variabel
 hsl_img = img[:]
@@ -198,18 +198,18 @@ A_f = 0
 count = 0
 
 # Processing Image
-for x in range(h):
-    for y in range(w):
+for x in range(hh):
+    for y in range(ww):
 
         hsl = [0, 0, 0]
         #print(f"x = {x}, y = {y}")
         
         for c in range(3):
             ## Get Masking from the Image
-            mask = get_mask(img, x, y, c, h, w)
+            mask = get_mask(img, x, y, c, hh, ww)
 
-            # Check noise with threshold 2.5
-            threshold = 2.5
+            # Check noise with threshold 3.0
+            threshold = 3.0
             if(not(cek_noise2(mask, threshold))):
                 hsl[c] = mask[1][1]
                 continue
@@ -237,6 +237,7 @@ for x in range(h):
                 hsl[c] = int(math.floor(A_f))
         hsl_img[x, y] = [hsl[0], hsl[1], hsl[2]]
 
-sum_of_pixel = w * h  * c
+sum_of_pixel = ww * hh * 3
+print(f"w = {ww}, h  = {hh}, c = {3}, sum = {sum_of_pixel}")
 print(f"Sum of noise = {count} of {sum_of_pixel} = {count / float(sum_of_pixel) * 100}%")
 cv2.imwrite(save_fol_loc, hsl_img)

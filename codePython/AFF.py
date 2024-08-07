@@ -1,7 +1,25 @@
 # referensi: https://www.geeksforgeeks.org/python-opencv-getting-and-setting-pixels/
 
+import numpy as np
 import cv2
 import math
+
+# Function to check noise in image
+def cek_noise2(mask, threshold):
+    # Calculate the local mean and variance
+    local_mean = np.mean(mask)
+    local_variance = np.var(mask)
+
+    # Calculate the standard deviation
+    local_std = np.sqrt(local_variance)
+
+     # Get the pixel value
+    pixel_value = mask[1][1]
+
+    # Determine if the pixel is noise
+    if abs(pixel_value - local_mean) > threshold * local_std:
+        return True
+    return False
 
 def get_mask(img, x, y, c, h, w):
     # x = h = height
@@ -159,8 +177,10 @@ def Af(m_x, m_k_x):
     return m_k_x[ind]
 
 ## Read Image
-img = cv2.imread("Lokasi Citra")
-print(f"Bentuk citra:\nTinggi Citra: {img.shape[0]}\nLebar Citra: {img.shape[1]}\nTChannel Citra: {img.shape[2]}\n")
+img_loc = "D:\\GitHub\\PDP-Genap-2024\\codePython\\result-0.png"
+save_fol_loc = "D:\\GitHub\\PDP-Genap-2024\\codePython\\result-0-4.png"
+img = cv2.imread(img_loc)
+print(f"Bentuk citra:\nTinggi Citra: {img.shape[0]}\nLebar Citra: {img.shape[1]}\nChannel Citra: {img.shape[2]}\n")
 
 ## Get the image detail [ height, width, channel ]
 h = img.shape[0]
@@ -175,19 +195,31 @@ m_X = 0
 m_k_x = [0] * 16
 A_f = 0
 
-## Get Masking from the Image
+count = 0
+
+# Processing Image
 for x in range(h):
     for y in range(w):
 
         hsl = [0, 0, 0]
-        print(f"x = {x}, y = {y}")
+        #print(f"x = {x}, y = {y}")
+        
         for c in range(3):
+            ## Get Masking from the Image
             mask = get_mask(img, x, y, c, h, w)
 
-            if(not(cek_noise(mask))):
-                print(f"Channel ke-{c}: Skip")
+            # Check noise with threshold 2.5
+            threshold = 2.5
+            if(not(cek_noise2(mask, threshold))):
+                hsl[c] = mask[1][1]
                 continue
 
+            #Print noise location
+            #print(f"x = {x}, y = {y}, c = {c} noise")
+
+            #count the total of noise in image
+            count = count + 1
+            
             rata = get_mean(mask)
             rata2 = get_mean2(mask)
             m_k_x = mKX(mask)
@@ -205,4 +237,6 @@ for x in range(h):
                 hsl[c] = int(math.floor(A_f))
         hsl_img[x, y] = [hsl[0], hsl[1], hsl[2]]
 
-cv2.imwrite("Lokasi Simpan Citra", hsl_img)
+sum_of_pixel = w * h  * c
+print(f"Sum of noise = {count} of {sum_of_pixel} = {count / float(sum_of_pixel) * 100}%")
+cv2.imwrite(save_fol_loc, hsl_img)
